@@ -8,7 +8,7 @@ const SLIDES: [string, string, string][] = [
   ['🌍', 'One World', 'EkDuniya — one identity for your social life, family, business and private locker. Made for India, ready for the world.'],
   ['🌳', 'Family, Forever', 'Build your family tree from great-grandparents to 2026. Save stories, dates and albums for generations.'],
   ['💼', 'Your Private Briefcase', 'A PIN-locked vault for documents and precious photos. Only you hold the key.'],
-  ['🎬', 'Reels, Live & Rewards', 'Post clips, go live, earn EkDuniya Coins for genuine engagement.'],
+  ['🎬', 'Clips, Live & Rewards', 'Post clips, go live, earn EkDuniya Coins for genuine engagement.'],
   ['🌐', '22 Languages, Web3-Ready', 'Chat in your mother tongue — colour themes change every hour. Own your identity with decentralized tech.'],
 ];
 

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { supa, isSupaConfigured } from '../../lib/supabase';
 import { RequireAuth } from '../../lib/auth';
 import { useLang, Shell } from '../../components/ui';
+import { StoriesBar, StoryViewer, SponsoredCard, type Story } from '../../components/hybrid';
 
 type Post = { id: string; user_id: string; text: string; image_url: string | null; likes_count: number; created_at: string; av_profiles?: { full_name: string; avatar_emoji: string } };
 type Profile = { id: string; full_name: string; avatar_emoji: string };
@@ -18,6 +19,7 @@ function Feed() {
   const [text, setText] = useState('');
   const [liked, setLiked] = useState<Set<string>>(new Set());
   const [busy, setBusy] = useState(false);
+  const [viewer, setViewer] = useState<{ stories: Story[]; idx: number } | null>(null);
 
   async function load() {
     if (!isSupaConfigured()) return;
@@ -44,7 +46,7 @@ function Feed() {
       const { error } = await supa().from('av_posts').insert({ user_id: user.id, text: text.trim() });
       if (error) throw error;
       setText(''); await load();
-      await supa().rpc('av_add_points', { uid: user.id, pts: 10 }).catch(() => {});
+      try { await supa().rpc('av_add_points', { uid: user.id, pts: 10 }); } catch { /* points optional */ }
     } catch (e) { console.error(e); }
     finally { setBusy(false); }
   }
@@ -59,7 +61,16 @@ function Feed() {
   }
 
   return (
-    <Shell title={t('home')} sub="India's public digital square.">
+    <Shell title={t('home')} sub="India's public digital square." wide>
+      {/* Stories carousel */}
+      <StoriesBar onSelect={(stories, idx) => setViewer({ stories, idx })} />
+      {viewer && (
+        <StoryViewer
+          stories={viewer.stories} idx={viewer.idx}
+          onClose={() => setViewer(null)}
+          onNav={(i) => setViewer({ stories: viewer.stories, idx: i })}
+        />
+      )}
       <div className="card">
         <textarea className="input" placeholder={t('whatsNew')} value={text} onChange={e => setText(e.target.value)} />
         <div className="row">
@@ -68,20 +79,23 @@ function Feed() {
         </div>
       </div>
       {!isSupaConfigured() && <div className="note">Connect Supabase keys to load the live feed.</div>}
-      {posts.map(p => {
+      {posts.map((p, i) => {
         const pr = profiles[p.user_id];
         return (
-          <div className="card" key={p.id}>
-            <div className="posthead">
-              <div className="avatar">{pr?.avatar_emoji || '🙂'}</div>
-              <div className="pmeta"><b>{pr?.full_name || 'Member'}</b><small>{new Date(p.created_at).toLocaleString()}</small></div>
+          <div key={p.id}>
+            <div className="card">
+              <div className="posthead">
+                <div className="avatar">{pr?.avatar_emoji || '🙂'}</div>
+                <div className="pmeta"><b>{pr?.full_name || 'Member'}</b><small>{new Date(p.created_at).toLocaleString()}</small></div>
+              </div>
+              <p className="ptext">{p.text}</p>
+              <div className="pactions">
+                <button className={liked.has(p.id) ? 'on' : ''} onClick={() => like(p)}>❤️ {p.likes_count}</button>
+                <button>💬 Comment</button>
+                <button>↗️ Share</button>
+              </div>
             </div>
-            <p className="ptext">{p.text}</p>
-            <div className="pactions">
-              <button className={liked.has(p.id) ? 'on' : ''} onClick={() => like(p)}>❤️ {p.likes_count}</button>
-              <button>💬 Comment</button>
-              <button>↗️ Share</button>
-            </div>
+            {(i + 1) % 4 === 0 && <SponsoredCard seed={i} />}
           </div>
         );
       })}

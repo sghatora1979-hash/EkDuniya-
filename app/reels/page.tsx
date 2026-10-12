@@ -36,10 +36,10 @@ function ReelGrid() {
   }
 
   return (
-    <Shell title={t('reels')} sub="Short clips, desi style. Video upload via storage in v1.1.">
+    <Shell title={t('reels')} sub="Short clips, desi style. Video upload via storage in v1.1." wide>
       <div className="card">
         <div className="row">
-          <input className="input" style={{ flex: 1, margin: 0 }} placeholder="Reel title…" value={title} onChange={e => setTitle(e.target.value)} />
+          <input className="input" style={{ flex: 1, margin: 0 }} placeholder="Clip title…" value={title} onChange={e => setTitle(e.target.value)} />
           <select className="input" style={{ width: 90, margin: 0 }} value={emoji} onChange={e => setEmoji(e.target.value)}>
             {EMOJIS.map(e => <option key={e}>{e}</option>)}
           </select>
@@ -55,7 +55,7 @@ function ReelGrid() {
           </div>
         ))}
       </div>
-      {reels.length === 0 && <div className="card"><p style={{ color: 'var(--mut)' }}>No reels yet — post the first one! 🎬</p></div>}
+      {reels.length === 0 && <div className="card"><p style={{ color: 'var(--mut)' }}>No clips yet — post the first one! 🎬</p></div>}
       {watch !== null && reels[watch] && (
         <Viewer reel={reels[watch]} color={BG[watch % BG.length]}
           onClose={() => setWatch(null)}

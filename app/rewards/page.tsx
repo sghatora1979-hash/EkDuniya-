@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { supa, isSupaConfigured } from '../../lib/supabase';
 import { RequireAuth } from '../../lib/auth';
 import { useLang, Shell } from '../../components/ui';
+import { ReferCard } from '../../components/hybrid';
 
 export default function Rewards() {
   return <RequireAuth><Wallet /></RequireAuth>;
@@ -47,6 +48,9 @@ function Wallet() {
             <div className="e">{e}</div><small>{name}{got ? ' ✓' : ''}</small>
           </div>
         ))}
+      </div>
+      <div style={{ marginTop: 22 }}>
+        <ReferCard />
       </div>
     </Shell>
   );
