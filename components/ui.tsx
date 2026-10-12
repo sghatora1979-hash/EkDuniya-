@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { getLang, setLang, tr, LANGS, type Lang, type StrKey } from '../lib/i18n';
 import { hourTheme, applyTheme, msToNextHour, type HourTheme } from '../lib/theme';
+import { MobileNav, Sidebar } from './hybrid';
 
 export function useLang() {
   const [lang, setL] = useState<Lang>('en');
@@ -40,7 +41,7 @@ export function ThemeBadge() {
 export function Navbar() {
   const { lang, switchLang, t } = useLang();
   const links: [string, StrKey][] = [
-    ['/home', 'home'], ['/reels', 'reels'], ['/family', 'family'],
+    ['/home', 'home'], ['/reels', 'reels'], ['/live', 'live'], ['/family', 'family'],
     ['/briefcase', 'briefcase'], ['/messages', 'messages'],
     ['/rewards', 'rewards'], ['/business', 'business'], ['/profile', 'profile'],
   ];
@@ -62,7 +63,9 @@ export function Navbar() {
   );
 }
 
-export function Shell({ children, title, sub }: { children: React.ReactNode; title: string; sub?: string }) {
+export function Shell({ children, title, sub, wide = false }: {
+  children: React.ReactNode; title: string; sub?: string; wide?: boolean;
+}) {
   return (
     <div className="wrap">
       <Navbar />
@@ -72,9 +75,17 @@ export function Shell({ children, title, sub }: { children: React.ReactNode; tit
           <ThemeBadge />
         </div>
         {sub && <p className="psub">{sub}</p>}
-        {children}
+        {wide ? (
+          <div className="hybrid">
+            <div className="feed-col">{children}</div>
+            <Sidebar />
+          </div>
+        ) : (
+          children
+        )}
       </main>
       <footer className="foot">EkDuniya 🇮🇳 — Made for India · Web3-ready · v1</footer>
+      <MobileNav />
     </div>
   );
 }
