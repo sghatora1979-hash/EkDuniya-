@@ -1,0 +1,65 @@
+EkDuniya — FULL Deploy Guide (from scratch, step by step)
+=========================================================
+Package: EkDuniya-FULL-latest.zip
+Contains: v1 + v2 (FB/IG hybrid, Stories, sponsored posts, register fix)
+          + Clips (Reels renamed, 23 languages) + Live telecast (/live)
+          + Profile social links + Refer & Earn + Futuristic 3D buttons
+          + supabase/migrations/ (001-004)
+Nothing deleted — all updates are additions.
+
+---------------------------------------------------------
+STEP 1: Supabase — run migrations (in order)
+---------------------------------------------------------
+1. Open supabase.com → Log in → open your EkDuniya project
+   (existing project "EkDuniya", Mumbai — or create a new one)
+2. Left menu → SQL Editor → New query
+3. Open file: supabase/migrations/001_apnaverse.sql → copy ALL
+   → paste in SQL Editor → Run
+   (creates tables, RLS, storage buckets av-media/av-vault/av-kyc)
+4. Repeat for 002_stories.sql → Run
+5. Repeat for 003_lives.sql → Run
+6. Repeat for 004_social_links.sql → Run
+   Each should say "Success".
+
+---------------------------------------------------------
+STEP 2: Supabase — fix Site URL (magic link login)
+---------------------------------------------------------
+1. Left menu → Authentication → URL Configuration
+2. Site URL = https://ek-duniya.vercel.app
+3. Save
+   (Without this, the "Sign in" email link goes to localhost and fails.)
+
+---------------------------------------------------------
+STEP 3: GitHub — upload the code
+---------------------------------------------------------
+1. Open github.com → your EkDuniya repo
+2. Add file → Upload files → Choose files
+   → select the EXTRACTED files from EkDuniya-FULL-latest.zip
+   (extract the zip on your laptop first)
+3. Commit changes
+   (If repo has old files, uploading same paths overwrites them —
+   nothing else is deleted.)
+
+---------------------------------------------------------
+STEP 4: Vercel — environment variables
+---------------------------------------------------------
+1. Open vercel.com → ek-duniya project → Settings → Environment Variables
+2. Add (if not already there):
+   NEXT_PUBLIC_SUPABASE_URL = https://pzndejpgbrikypbicalqr.supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY = (your anon key from Supabase →
+      Project Settings → API → anon public key)
+   ⚠️ Never paste keys in chat. Copy from Supabase dashboard only.
+3. IMPORTANT: add/change variables BEFORE deploy, then:
+   Deployments → ⋯ → Redeploy (so the new keys bake into the build)
+
+---------------------------------------------------------
+STEP 5: Test
+---------------------------------------------------------
+1. Open https://ek-duniya.vercel.app/register
+   → you should see "Test connection" button (proves new version is live)
+2. Click "Test connection" → should say "Database reachable ✓"
+3. Enter name + email + phone → Send code
+4. Open the Supabase email → click "Sign in" link → logged in! 🎉
+   (No 6-digit code in email — use the link, it works now.)
+
+If anything fails, screenshot the error and send it.

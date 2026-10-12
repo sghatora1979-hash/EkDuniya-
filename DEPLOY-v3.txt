@@ -1,0 +1,27 @@
+# EkDuniya v3 — DEPLOY STEPS
+
+## What's new (v2 + v2.1 + v3)
+1. **FB/IG hybrid** — mobile bottom nav, desktop sidebar + Muse AI, Stories carousel, sponsored posts.
+2. **/register fix** — Supabase packages upgraded + "Test connection" button.
+3. **Reels → Clips** renamed (all 23 languages).
+4. **Live telecast** (/live) — real camera preview, LIVE badge, viewer count, live chat, End Stream. (Demo mode until streaming keys added.)
+5. **Social links** on profile — Telegram, Facebook, Instagram, TikTok, VK, YouTube.
+6. **Refer & Earn** card on /rewards — share via WhatsApp, Telegram, Facebook, Messenger, LinkedIn, Instagram, Copy link.
+7. **Futuristic 3D buttons** — all buttons raised/glow/press-in.
+
+## Deploy
+1. Download zip, extract.
+2. Upload ALL files to GitHub repo **EkDuniya** (replace existing).
+   Click-only: Add file → Upload files → Choose files → Commit changes.
+3. Vercel auto-deploys (~2 min).
+
+## One-time: run migrations (Supabase → SQL Editor → New query → Run)
+Run EACH of these once (skip any already run):
+- supabase/migrations/002_stories.sql  (Stories table)
+- supabase/migrations/003_lives.sql    (Live streams table)
+- supabase/migrations/004_social_links.sql  (profile social links column)
+
+## If /register still says "Failed to fetch"
+Open live /register → tap **Test connection** → follow what it says.
+Most likely: Vercel → Settings → Environment Variables → check
+NEXT_PUBLIC_SUPABASE_URL + NEXT_PUBLIC_SUPABASE_ANON_KEY → Redeploy.
